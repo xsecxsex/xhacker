@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRASH - Choose Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #050000;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bg-gif {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('YOUR_GIF_HERE.gif'); 
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+            z-index: -2;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(5,0,0,0.2) 0%, rgba(5,0,0,0.8) 100%);
+            z-index: -1;
+        }
+
+        header {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            right: 30px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 10;
+            direction: ltr;
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #8b0000;
+            border-radius: 50px;
+            padding: 4px 14px;
+            background: rgba(20, 0, 0, 0.4);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ff0000;
+            animation: pulse 1.5s infinite;
+        }
+
+        .text-muted { color: #888; }
+        .text-red { color: #ff1a1a; }
+
+        /* --- الشاشة الأولى --- */
+        #screen-1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .main-container {
+            border: 1px solid rgba(255, 0, 0, 0.25);
+            border-radius: 20px;
+            padding: 70px 50px;
+            background: rgba(10, 0, 0, 0.1); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+            width: 80%;
+            max-width: 1100px;
+        }
+
+        .title {
+            color: #ff1a1a;
+            font-size: 24px;
+            margin-bottom: 35px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .game-card {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #ff0000;
+            border-radius: 18px;
+            background: #0a0000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.6), inset 0 0 15px rgba(255, 0, 0, 0.2);
+            margin-bottom: 40px;
+            transition: transform 0.2s;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.9), inset 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        .game-card img {
+            width: 85px;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .game-name {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 900;
+            font-family: Arial, sans-serif;
+        }
+
+        .play-btn {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 45px;
+            font-size: 22px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.8);
+            width: fit-content;
+            min-width: 450px;
+            transition: background 0.2s, box-shadow 0.2s;
+            direction: rtl;
+            text-align: center;
+        }
+
+        .play-btn:hover {
+            background: #ff1a1a;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 1);
+        }
+
+        /* --- الشاشة التانية (1xbet) --- */
+        #screen-2 {
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 900px;
+            z-index: 10;
+        }
+
+        /* الصندوق العلوي */
+        .top-box {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            text-align: center;
+            background: rgba(10, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .top-box h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .top-box p {
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        .top-box p span {
+            color: #ff0000;
+            font-weight: 700;
+        }
+
+        /* كارت المنصة */
+        .platform-card {
+            border: 1px solid #ff0000;
+            border-radius: 15px;
+            padding: 15px 25px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 0, 0, 0.4);
+            margin-bottom: 20px;
+            direction: ltr; /* لضبط اتجاه العناصر */
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .platform-card .left-side {
+            display: flex;
+            align-items: center;
+        }
+
+        .platform-card .check-circle {
+            width: 30px;
+            height: 30px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        }
+
+        .platform-card .right-side {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .platform-info-text {
+            text-align: right;
+            direction: rtl;
+        }
+
+        .platform-info-text .name {
+            font-size: 24px;
+            font-weight: 900;
+            font-family: Arial, sans-serif;
+            color: #ff1a1a;
+            letter-spacing: 1px;
+        }
+
+        .platform-info-text .online {
+            font-size: 14px;
+            font-weight: 700;
+            color: #00ff00;
+        }
+
+        .platform-logo-circle {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            background: #000;
+        }
+
+        .platform-logo-circle img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+
+        /* زر الاتصال */
+        .connect-btn {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            padding: 18px;
+            font-size: 22px;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            direction: rtl; /* لضبط النص العربي */
+        }
+
+        .connect-btn:hover {
+            background: #ff1a1a;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 1);
+        }
+
+        .connect-btn img {
+            height: 24px;
+            width: auto;
+            border-radius: 4px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-gif"></div>
+    <div class="bg-overlay"></div>
+
+    <header>
+        <div class="pill">
+            <span class="dot"></span>
+            <span class="text-muted">ONLINE:</span>
+            <span class="text-red">937</span>
+        </div>
+        <div class="pill" style="direction: rtl;">
+            <span class="text-red" style="font-family: monospace;">&lt;/&gt;</span>
+            <span class="text-muted">VERSION</span>
+            <span class="text-red">1.0.0</span>
+        </div>
+    </header>
+
+    <!-- الشاشة الأولى -->
+    <main id="screen-1">
+        <div class="main-container">
+            <h1 class="title">اختر لعبتك</h1>
+            
+            <div class="game-card">
+                <img src="YOUR_CRASH_IMAGE.png" alt="CRASH">
+                <span class="game-name">CRASH</span>
+            </div>
+
+            <button class="play-btn" onclick="showScreen2()">اضغط هنا لاختيار المنصة التي ستلعب عليها</button>
+        </div>
+    </main>
+
+    <!-- الشاشة التانية -->
+    <main id="screen-2">
+        <!-- صندوق العنوان -->
+        <div class="top-box">
+            <h2>اختر المنصة</h2>
+            <p>اللعبة المختارة: <span>Crash</span></p>
+        </div>
+
+        <!-- كارت المنصة 1xbet -->
+        <div class="platform-card" id="1xbet-card">
+            <div class="left-side">
+                <div class="check-circle">✓</div>
+            </div>
+            <div class="right-side">
+                <div class="platform-info-text">
+                    <div class="name">1XBET</div>
+                    <div class="online">ONLINE</div>
+                </div>
+                <div class="platform-logo-circle">
+                    <img src="1xbet.png" alt="1xbet">
+                </div>
+            </div>
+        </div>
+
+        <!-- زر الاتصال مع اللوجو جواه -->
+        <button class="connect-btn">
+            <span>الاتصال بسيرفر منصة</span>
+            <img src="1xbet.png" alt="1xbet">
+            <span>1xbet</span>
+        </button>
+    </main>
+
+    <script>
+        function showScreen2() {
+            document.getElementById('screen-1').style.display = 'none';
+            document.getElementById('screen-2').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
